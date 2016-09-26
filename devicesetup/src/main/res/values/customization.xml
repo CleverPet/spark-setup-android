@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--<string name="brand_name">asdf1</string>-->
+    <string name="device_name">CleverPet Hub</string>
+    <string name="network_name_prefix">PHOTON</string>
+    <!-- enable organization mode -->
+    <bool name="organization">true</bool>
+    <!-- organization display name -->
+    <string name="organization_name">CleverPet</string>
+    <!-- organizational name for API endpoint URL - must specify for orgMode *new* -->
+    <string name="organization_slug">cleverpet</string>
+    <!-- enable product string for API endpoint URL - must specify for orgMode *new* -->
 
     <string name="brand_name">Particle</string>
     <string name="app_name">@string/brand_name</string>
-    <string name="device_name">Photon</string>
+    <!--<string name="device_name">Photon</string>-->
     <drawable name="device_image">@drawable/photon_vector</drawable>
     <drawable name="device_image_small">@drawable/photon_vector_small</drawable>
 
@@ -14,7 +24,7 @@
 
     <string name="mode_button_name">Mode button</string>
     <string name="listen_mode_led_color_name">blue</string>
-    <string name="network_name_prefix">@string/device_name</string>
+    <!--<string name="network_name_prefix">@string/device_name</string>-->
 
     <string name="terms_of_service_uri">https://www.particle.io/tos</string>
     <string name="privacy_policy_uri">https://www.particle.io/privacy</string>
@@ -57,9 +67,13 @@
     <string name="header_text_font_name">fonts/roboto_light.ttf</string>
 
     <!-- enable invite codes, other APIs -->
-    <bool name="organization">false</bool>
-    <string name="organization_slug">CHANGE_ME</string>
-    <string name="product_slug">CHANGE_ME</string>
+    <!--<bool name="organization">true</bool>-->
+    <!--<string name="organization_slug">cleverpet</string>-->
+    <!--<string name="product_slug">CHANGE_ME</string>-->
+    <string-array name="product_slugs">
+        <item>cleverpet-01-v010</item>
+        <item>cleverpet---p1-020</item>
+    </string-array>
 
     <!-- FIXME: unused, remove? -->
     <!-- filename of the setup video, which should be placed under the src/main/res/raw folder -->
