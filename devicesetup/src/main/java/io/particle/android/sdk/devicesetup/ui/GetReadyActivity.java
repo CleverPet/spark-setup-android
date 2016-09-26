@@ -12,9 +12,10 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 
+import com.google.common.collect.*;
 import com.squareup.phrase.Phrase;
 
-import java.util.Arrays;
+import java.util.*;
 
 import io.particle.android.sdk.accountsetup.LoginActivity;
 import io.particle.android.sdk.cloud.ParticleCloud;
@@ -41,7 +42,7 @@ public class GetReadyActivity extends BaseActivity implements PermissionsFragmen
     private ParticleCloud sparkCloud;
     private SoftAPConfigRemover softAPConfigRemover;
 
-    private AsyncApiWorker<ParticleCloud, ClaimCodeResponse> claimCodeWorker;
+    private AsyncApiWorker<ParticleCloud, Map<String/*product_slug*/, ClaimCodeResponse>> claimCodeWorker;
 
 
     @Override
@@ -105,16 +106,20 @@ public class GetReadyActivity extends BaseActivity implements PermissionsFragmen
         DeviceSetupState.reset();
         showProgress(true);
         final Context ctx = this;
-        claimCodeWorker = Async.executeAsync(sparkCloud, new Async.ApiWork<ParticleCloud, ClaimCodeResponse>() {
+        claimCodeWorker = Async.executeAsync(sparkCloud, new Async.ApiWork<ParticleCloud, Map<String/*product_slug*/, ClaimCodeResponse>>() {
             @Override
-            public ClaimCodeResponse callApi(ParticleCloud sparkCloud) throws ParticleCloudException {
+            public Map<String/*product_slug*/, ClaimCodeResponse> callApi(ParticleCloud sparkCloud) throws ParticleCloudException {
                 Resources res = ctx.getResources();
                 if (res.getBoolean(R.bool.organization)) {
-                    return sparkCloud.generateClaimCodeForOrg(
-                            res.getString(R.string.organization_slug),
-                            res.getString(R.string.product_slug));
+                    Map<String/*product_slug*/, ClaimCodeResponse> claimCodeResponses = Maps.newHashMap();
+                    for (String product_slug : res.getStringArray(R.array.product_slugs)) {
+                        ClaimCodeResponse claimCodeResponse = sparkCloud.generateClaimCodeForOrg(
+                                res.getString(R.string.organization_slug), product_slug);
+                        claimCodeResponses.put(product_slug, claimCodeResponse);
+                    }
+                    return claimCodeResponses;
                 } else {
-                    return sparkCloud.generateClaimCode();
+                    return ImmutableMap.of("dont_care", sparkCloud.generateClaimCode());
                 }
             }
 
@@ -125,12 +130,21 @@ public class GetReadyActivity extends BaseActivity implements PermissionsFragmen
             }
 
             @Override
-            public void onSuccess(ClaimCodeResponse result) {
-                log.d("Claim code generated: " + result.claimCode);
+            public void onSuccess(Map<String/*product_slug*/, ClaimCodeResponse> result) {
 
-                DeviceSetupState.claimCode = result.claimCode;
-                if (truthy(result.deviceIds)) {
-                    DeviceSetupState.claimedDeviceIds.addAll(Arrays.asList(result.deviceIds));
+                Map<String, String> claimCodes = Maps.newHashMap();
+                List<String> deviceIds = Lists.newArrayList();
+                for (String product_slug : result.keySet()) {
+                    ClaimCodeResponse claimCodeResponse = result.get(product_slug);
+                    claimCodes.put(product_slug, claimCodeResponse.claimCode);
+                    deviceIds.addAll(Arrays.asList(claimCodeResponse.deviceIds));
+                }
+
+                log.d("Claim code generated: " + claimCodes);
+
+                DeviceSetupState.claimCodes = claimCodes;
+                if (truthy(deviceIds)) {
+                    DeviceSetupState.claimedDeviceIds.addAll(deviceIds);
                 }
 
                 if (isFinishing()) {

@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 
 import io.particle.android.sdk.accountsetup.LoginActivity;
 import io.particle.android.sdk.cloud.ParticleCloud;
-import io.particle.android.sdk.devicesetup.R;
+import io.particle.android.sdk.devicesetup.*;
 import io.particle.android.sdk.devicesetup.commands.CommandClient;
 import io.particle.android.sdk.devicesetup.commands.DeviceIdCommand;
 import io.particle.android.sdk.devicesetup.commands.InterfaceBindingSocketFactory;
@@ -503,10 +503,15 @@ public class DiscoverDeviceActivity extends RequiresWifiScansActivity
         private void setClaimCode(InterfaceBindingSocketFactory socketFactory)
                 throws SetupStepException {
             try {
-                log.d("Setting claim code using code: " + DeviceSetupState.claimCode);
+
+                String product_slug = ParticleDeviceSetupLibrary.getInstance().getDeviceSetupResolver().getProductSlug(DeviceSetupState.deviceToBeSetUpId);
+                String claimCode = DeviceSetupState.claimCodes.get(product_slug);
+
+                log.d("Setting claim code using slug: " + product_slug);
+                log.d("Setting claim code using code: " + claimCode);
 
                 SetCommand.Response response = client.sendCommandAndReturnResponse(
-                        new SetCommand("cc", StringUtils.remove(DeviceSetupState.claimCode, "\\")),
+                        new SetCommand("cc", StringUtils.remove(claimCode, "\\")),
                         SetCommand.Response.class, socketFactory);
 
                 if (truthy(response.responseCode)) {
