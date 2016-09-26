@@ -16,6 +16,10 @@ import io.particle.android.sdk.devicesetup.ui.GetReadyActivity;
 
 public class ParticleDeviceSetupLibrary {
 
+    public interface DeviceSetupResolver {
+        String getProductSlug(String deviceId);
+    }
+
     /**
      * The contract for the broadcast sent upon device setup completion.
      * <p/>
@@ -104,11 +108,11 @@ public class ParticleDeviceSetupLibrary {
      * @param mainActivity the class for your 'main" activity, i.e.: the class you want to
      *                     return to when the setup process is complete.
      */
-    public static void init(Context ctx, Class<? extends Activity> mainActivity) {
+    public static void init(Context ctx, Class<? extends Activity> mainActivity, DeviceSetupResolver resolver) {
         if (instance == null) {
             // ensure the cloud SDK is initialized
             ParticleCloudSDK.init(ctx);
-            instance = new ParticleDeviceSetupLibrary(mainActivity);
+            instance = new ParticleDeviceSetupLibrary(mainActivity, resolver);
         }
     }
 
@@ -125,10 +129,16 @@ public class ParticleDeviceSetupLibrary {
         return mainActivity;
     }
 
-    private final Class<? extends Activity> mainActivity;
+    public DeviceSetupResolver getDeviceSetupResolver() {
+        return resolver;
+    }
 
-    private ParticleDeviceSetupLibrary(Class<? extends Activity> mainActivity) {
+    private final Class<? extends Activity> mainActivity;
+    private final DeviceSetupResolver resolver;
+
+    private ParticleDeviceSetupLibrary(Class<? extends Activity> mainActivity, DeviceSetupResolver resolver) {
         this.mainActivity = mainActivity;
+        this.resolver = resolver;
     }
 
 }
