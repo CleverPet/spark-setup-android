@@ -39,12 +39,25 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginBottom="12dp"
+            android:layout_marginBottom="6dp"
             android:layout_marginLeft="24dp"
             android:layout_marginRight="24dp"
             android:layout_marginTop="6dp"
             android:gravity="center"
             android:text="@string/setup_success_details"/>
+
+        <TextView
+            android:id="@+id/failure_code"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="12dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginTop="2dp"
+            android:gravity="center"
+            android:text="@string/setup_failure_code"
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/device_name_label"

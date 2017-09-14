@@ -132,8 +132,16 @@ public class SuccessActivity extends BaseActivity {
 
         Pair<? extends CharSequence, CharSequence> resultStrings = buildUiStringPair(resultCode);
         Ui.setText(this, R.id.result_summary, resultStrings.first);
-        Ui.setText(this, R.id.result_details, resultStrings.second);
-        Ui.makeLink(this, R.id.result_details);
+        if (resultCode == RESULT_SUCCESS || resultCode == RESULT_SUCCESS_UNKNOWN_OWNERSHIP) {
+            Ui.setText(this, R.id.result_details, resultStrings.second);
+            Ui.makeVisible(this, R.id.failure_code, false);
+        }
+        else {
+            Ui.setText(this, R.id.result_details, resultStrings.second);
+            Ui.makeVisible(this, R.id.failure_code, true);
+            Ui.setText(this, R.id.failure_code, String.format(getString(R.string.setup_failure_code), Integer.toString(resultCode)));
+            Ui.makeLink(this, R.id.result_details);
+        }
 
         Ui.findView(this, R.id.action_done).setOnClickListener(v -> {
             deviceNameView.setError(null);

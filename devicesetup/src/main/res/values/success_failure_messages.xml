@@ -9,9 +9,7 @@
 
     <string name="setup_failure_summary">Error!</string>
     <string name="setup_failure_details">Your {device_name} couldn’t connect to WiFi. Is the WiFi signal where you put the Hub strong enough? Did you enter your WiFi password correctly?\n\nTo try setup again: a) remove the Hub dome b) unplug the Hub and plug it back in c) touch the center touchpad three times and d) place the dome back on the Hub base. When the light on the Hub dome flashes blue, press Continue.\n\nStill having trouble?\n<a href="http://support.clever.pet/connecting-to-wifi">Find more troubleshooting tips here.</a></string>
-
-    <string name="setup_failure_lost_connection_to_device">Setup process lost connection to the {device_name} before being able to configure it to use the supplied Wi-fi credentials, please try running setup again after resetting your {device_name} and putting it back in listen mode if needed.</string>
-
+    <string name="setup_failure_code">Error code: %1$s. </string>
     <!-- Below is the previous error messages, left below in the event they could be needed as a reference in the future -->
 
     <!--<string name="setup_failure_claiming_summary">Oops!</string>-->

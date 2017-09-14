@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import io.particle.android.sdk.devicesetup.R;
+import io.particle.android.sdk.devicesetup.ui.SuccessActivity;
 
 public class Ui {
 
@@ -123,6 +124,11 @@ public class Ui {
 
 
     public static void makeLink(FragmentActivity activity, int viewId) {
-        ((TextView)findView(activity, R.id.result_details)).setMovementMethod(LinkMovementMethod.getInstance());
+        ((TextView)findView(activity, viewId)).setMovementMethod(LinkMovementMethod.getInstance());
+    }
+
+    public static void makeVisible(FragmentActivity activity, int viewId, boolean visible) {
+        if (visible) findView(activity, viewId).setVisibility(View.VISIBLE);
+        else findView(activity, viewId).setVisibility(View.GONE);
     }
 }
